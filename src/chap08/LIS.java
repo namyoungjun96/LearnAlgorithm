@@ -18,8 +18,8 @@ public class LIS {
         System.out.println(lis2(0));
 
         int maxLen = 0;
-        for(int begin = 0; begin < n; begin ++)
-            maxLen = Math.max(maxLen, lis2(begin));
+        for(int begin = -1; begin < n-1; begin ++)
+            maxLen = Math.max(maxLen, lis3(begin));
 
         System.out.println(maxLen);
     }
