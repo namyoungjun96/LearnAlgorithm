@@ -25,7 +25,7 @@ public class LIS {
     }
 
     static int lis3(int start) {
-        if(cache[start+1] != -1) return cache[start+1];
+        if(cache[start+1] != 0) return cache[start+1];
 
         cache[start+1] = 1;
 
