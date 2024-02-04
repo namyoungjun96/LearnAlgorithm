@@ -1,10 +1,12 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+package chap21;
 
-public class Test {
+import java.io.BufferedReader;
+        import java.io.IOException;
+        import java.io.InputStreamReader;
+        import java.util.Arrays;
+        import java.util.StringTokenizer;
+
+public class Traversal {
     public static int find(int[] arr, int value) {
         for (int i = 0; i < arr.length; i++) {
             if (arr[i] == value) return i;
@@ -21,7 +23,7 @@ public class Test {
         // 이 트리의 루트는 전위 탐색 결과로부터 곧장 알 수 있다.
         final int root = preOrder[0];
         // 이 트리의 왼쪽 서브트리의 크기는 중위 탐색 결과에서 루트의 위치를 찾아서 알 수 있다.
-        final int L = find(inOrder, root);
+        final int L =find(inOrder, root);
         // 오른쪽 서브트리의 크기는 N에서 왼쪽 서브트리와 루트를 빼면 알 수 있다.
         final int R = N - 1 - L;
         // 왼쪽과 오른쪽 서브트리의 순회 결과를 출력
