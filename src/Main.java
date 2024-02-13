@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -9,37 +8,54 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
 
-        int testcase = Integer.parseInt(br.readLine());
         st = new StringTokenizer(br.readLine(), " ");
-        long[] distance = new long[testcase-1];
-        for(int i=0; i<testcase-1; i++) {
-            distance[i] = Integer.parseInt(st.nextToken());
-        }
+        int testcase = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
+        st = new StringTokenizer(br.readLine(), " ");
+        int[] treeList = new int[testcase];
+        int high = 0;
+        for(int t=0; t<testcase; t++) {
+            int num = Integer.parseInt(st.nextToken());
+            treeList[t] = num;
 
-        st = new StringTokenizer(br.readLine(), " ");
-        long[] cities = new long[testcase];
-        for(int i=0; i<testcase; i++) {
-            cities[i] = Integer.parseInt(st.nextToken());
+            if(high < num)
+                high = num;
         }
 
 //        int n = 4;
-//        int[] distance = {2, 3, 1};
-//        int[] cities = {5, 2, 4, 1};
+//        int m = 7;
+//        int[] treeList = {20, 15, 10, 17};
 
-        System.out.println(solution(distance, cities));
+//        int n = 5;
+//        int m = 20;
+//        int[] treeList = {4, 42, 40, 26, 46};
+
+        System.out.println(solution(m, treeList, high));
     }
 
-    public static long solution(long[] distance, long[] cities) {
-        long answer = 0;
-        long cost = cities[0];
+    public static long solution(int m, int[] treeList, int high) {
+        int low = 0;
 
-        for (int i=0; i<distance.length; i++) {
-            if(cities[i] < cost)
-                cost = cities[i];
+        while (low < high) {
+            int mid = (high + low) / 2;
+            long sum = 0;
 
-            answer += distance[i] * cost;
+            for (int i : treeList) {
+                if(i - mid > 0)
+                    sum += i - mid;
+            }
+
+            if (sum < m) {
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
+
+            System.out.println(mid);
         }
 
-        return answer;
+        System.out.println(high + ", " + low);
+
+        return low - 1;
     }
 }
