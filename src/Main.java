@@ -6,55 +6,51 @@ import java.util.StringTokenizer;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");;
 
-        st = new StringTokenizer(br.readLine(), " ");
         int testcase = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
-        st = new StringTokenizer(br.readLine(), " ");
-        int[] treeList = new int[testcase];
-        int high = 0;
+        int n = Integer.parseInt(st.nextToken());
+
+        long[] line = new long[testcase];
+
+        long high = 0;
         for(int t=0; t<testcase; t++) {
-            int num = Integer.parseInt(st.nextToken());
-            treeList[t] = num;
+            int num = Integer.parseInt(br.readLine());
+            line[t] = num;
 
             if(high < num)
                 high = num;
         }
 
-//        int n = 4;
-//        int m = 7;
-//        int[] treeList = {20, 15, 10, 17};
+//        int k = 4;
+//        int n = 11;
+//        int high = 0;
+//
+//        int[] line = {802, 743, 457, 539};
+//        for(int i: line)
+//            if(high < i)
+//                high = i;
 
-//        int n = 5;
-//        int m = 20;
-//        int[] treeList = {4, 42, 40, 26, 46};
-
-        System.out.println(solution(m, treeList, high));
+        high ++;
+        System.out.println(solution(n, line, high));
     }
 
-    public static long solution(int m, int[] treeList, int high) {
-        int low = 0;
+    public static long solution(int n, long[] line, long high) {
+        long low = 0;
+        long mid;
 
-        while (low < high) {
-            int mid = (high + low) / 2;
+        while(low < high) {
             long sum = 0;
+            mid = (low + high) / 2;
 
-            for (int i : treeList) {
-                if(i - mid > 0)
-                    sum += i - mid;
-            }
+            for(long i: line)
+                sum += i/mid;
 
-            if (sum < m) {
+            if(sum < n)
                 high = mid;
-            } else {
+            else
                 low = mid + 1;
-            }
-
-            System.out.println(mid);
         }
-
-        System.out.println(high + ", " + low);
 
         return low - 1;
     }
