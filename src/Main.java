@@ -5,53 +5,46 @@ import java.util.StringTokenizer;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine(), " ");;
-
-        int testcase = Integer.parseInt(st.nextToken());
-        int n = Integer.parseInt(st.nextToken());
-
-        long[] line = new long[testcase];
-
-        long high = 0;
-        for(int t=0; t<testcase; t++) {
-            int num = Integer.parseInt(br.readLine());
-            line[t] = num;
-
-            if(high < num)
-                high = num;
-        }
-
-//        int k = 4;
-//        int n = 11;
-//        int high = 0;
+//        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//        StringTokenizer st;
 //
-//        int[] line = {802, 743, 457, 539};
-//        for(int i: line)
-//            if(high < i)
-//                high = i;
+//        int testcase = Integer.parseInt(br.readLine());
+//        StringBuilder sb = new StringBuilder();
+//
+//        for (int i = 0; i < testcase; i++) {
+//             st = new StringTokenizer(br.readLine(), " ");
+//
+//             int n = Integer.parseInt(st.nextToken());
+//             int m = Integer.parseInt(st.nextToken());
+//
+//            sb.append(solution(n, m, new int[n+1][m+1])).append("\n");
+//        }
+//
+//        System.out.print(sb);
 
-        high ++;
-        System.out.println(solution(n, line, high));
+//        int n = Integer.parseInt(st.nextToken());
+//
+//        long[] line = new long[testcase];
+//
+//        long high = 0;
+//        for(int t=0; t<testcase; t++) {
+//            int num = Integer.parseInt(br.readLine());
+//            line[t] = num;
+//
+//            if(high < num)
+//                high = num;
+//        }
+
+        int n = 2;
+        int m = 3;
+
+        System.out.println(solution(n, m, new int[30][30]));
     }
 
-    public static long solution(int n, long[] line, long high) {
-        long low = 0;
-        long mid;
+    public static int solution(int n, int m, int[][] cache) {
+        if(cache[n][m] != 0) return cache[n][m];
+        if(n == 1) return cache[n][m] = m;
 
-        while(low < high) {
-            long sum = 0;
-            mid = (low + high) / 2;
-
-            for(long i: line)
-                sum += i/mid;
-
-            if(sum < n)
-                high = mid;
-            else
-                low = mid + 1;
-        }
-
-        return low - 1;
+        return solution(n-1, m-1, cache) + solution(n-1, m, cache);
     }
 }
