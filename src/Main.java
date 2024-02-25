@@ -1,50 +1,56 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-//        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//        StringTokenizer st;
-//
-//        int testcase = Integer.parseInt(br.readLine());
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 //        StringBuilder sb = new StringBuilder();
-//
-//        for (int i = 0; i < testcase; i++) {
-//             st = new StringTokenizer(br.readLine(), " ");
-//
-//             int n = Integer.parseInt(st.nextToken());
-//             int m = Integer.parseInt(st.nextToken());
-//
-//            sb.append(solution(n, m, new int[n+1][m+1])).append("\n");
-//        }
-//
-//        System.out.print(sb);
+        int n = Integer.parseInt(st.nextToken());
+        int l = Integer.parseInt(st.nextToken());
 
-//        int n = Integer.parseInt(st.nextToken());
-//
-//        long[] line = new long[testcase];
-//
-//        long high = 0;
-//        for(int t=0; t<testcase; t++) {
-//            int num = Integer.parseInt(br.readLine());
-//            line[t] = num;
-//
-//            if(high < num)
-//                high = num;
-//        }
+        List<Integer> answer = solution(n, l);
 
-        int n = 2;
-        int m = 3;
-
-        System.out.println(solution(n, m, new int[30][30]));
+        for (int i : answer) {
+            System.out.print(i + " ");
+        }
     }
 
-    public static int solution(int n, int m, int[][] cache) {
-        if(cache[n][m] != 0) return cache[n][m];
-        if(n == 1) return cache[n][m] = m;
+    private static List<Integer> solution(int n, int l) {
+        List<Integer> sequence = new LinkedList<>();
+        long sum = n * 2L;
+        int count = 0;
+        int listCount = 0;
 
-        return solution(n-1, m-1, cache) + solution(n-1, m, cache);
+        for (int i = l; i <= 100; i++) {
+            for (int j = (int) (sum / l + 1); j > n / 100000; j--) {
+                long temp = (long) i * (j - i + 1 + j);
+
+                if (sum == temp) {
+                    count = j;
+                    listCount = i;
+                    break;
+                } else if (sum > temp) {
+                    break;
+                }
+            }
+
+            if (count != 0)
+                break;
+        }
+
+        if (count - listCount < -1 || count == 0)
+            return Collections.singletonList(-1);
+
+        for (int i = count; i > count - listCount; i--) {
+            sequence.add(0, i);
+        }
+
+        return sequence;
     }
 }
