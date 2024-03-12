@@ -1,56 +1,35 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.StringTokenizer;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-//        StringBuilder sb = new StringBuilder();
-        int n = Integer.parseInt(st.nextToken());
-        int l = Integer.parseInt(st.nextToken());
+//        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 
-        List<Integer> answer = solution(n, l);
+        int x = Integer.parseInt(br.readLine());
+        System.out.println(Integer.bitCount(x));
 
-        for (int i : answer) {
-            System.out.print(i + " ");
-        }
+//        System.out.println(solution(x, 64));
     }
 
-    private static List<Integer> solution(int n, int l) {
-        List<Integer> sequence = new LinkedList<>();
-        long sum = n * 2L;
-        int count = 0;
-        int listCount = 0;
+    public static int solution(int x, int bar) {
+        int answer = (1 << bar) - 1;
 
-        for (int i = l; i <= 100; i++) {
-            for (int j = (int) (sum / l + 1); j > n / 100000; j--) {
-                long temp = (long) i * (j - i + 1 + j);
+        if(bar/2 > x)
+            answer = solution(x, bar/2);
 
-                if (sum == temp) {
-                    count = j;
-                    listCount = i;
-                    break;
-                } else if (sum > temp) {
-                    break;
-                }
-            }
-
-            if (count != 0)
-                break;
-        }
-
-        if (count - listCount < -1 || count == 0)
-            return Collections.singletonList(-1);
-
-        for (int i = count; i > count - listCount; i--) {
-            sequence.add(0, i);
-        }
-
-        return sequence;
+        return 0;
     }
 }
+
+/*
+ 64 -> X 막대는 더 작은 막대로 자름
+ 처음에는 64 합이 더 큰 경우
+ 1. 가지고있는 막대 중 길이가 가장 짧은 것을 절반으로 자른다.
+ 2. 자른 막대의 절반 중 하나를 버리고 남아있는 막대의 길이의 합이 x보다 크거나 같다면, 위에서 자른 막대의 절반 중 하나를 버린다.
+ 막대 /2 > 남아있는 길이의 합 x == 나머지 막대도 버림
+ 3. 남아있는 모든 막대의 합 = X
+
+ 64가 X가 되기위해 필요한 막대!
+*/
