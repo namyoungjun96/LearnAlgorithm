@@ -1,52 +1,45 @@
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 class Solution {
     public static void main(String[] args) {
-        System.out.println(Arrays.toString(solution(3, 5)));
+        long k = 5;
+        System.out.println(Arrays.toString(solution(4, k)));
+        // 2432902008176640000
     }
 
-    static int count = 0;
-    static int[] answer;
+    static Map<Long, int[]> map;
 
     public static int[] solution(int n, long k) {
-        int[] temp = new int[n];
-        int[] output = new int[n];
-        boolean[] visited = new boolean[n];
+        int[] answer = new int[n];
+        int[] output = new int[n-1];
+        int[] temp = new int[n-1];
+        long count = getPermutationCount(n, k)/n;
+        int index = (int) (k/count + (k % count > 0 ? 1 : 0));
+        boolean[] visited = new boolean[n-1];
+        int arrIndex = 0;
         for (int i = 1; i <= n; i++) {
-            temp[i-1] = i;
+            if(i == index)
+                continue;
+            temp[arrIndex++] = i;
         }
 
-        permutation(temp, 0, n, n);
+        map = new HashMap<>();
+
+        perm(temp, output, visited, 0, n-1, n-1, k%count);
+        answer[0] = index;
+        index = 1;
+        for(int i: map.get(k%count)) {
+            answer[index++] = i;
+        }
         return answer;
     }
 
-    static void permutation(int[] arr, int depth, int n, int r) {
+    static void perm(int[] arr, int[] output, boolean[] visited, int depth, int n, int r, long count) {
         if (depth == r) {
-            System.out.println(Arrays.toString(arr) + ", " + r);
-            return;
-        }
-
-        int count = 0;
-
-        for (int i = depth; i < n; i++) {
-            swap(arr, depth, i);
-            permutation(arr, depth + 1, n, r);
-            swap(arr, depth, i);
-        }
-    }
-
-    static void swap(int[] arr, int depth, int i) {
-        int temp = arr[depth];
-        arr[depth] = arr[i];
-        arr[i] = temp;
-    }
-
-    static void perm(int[] arr, int[] output, boolean[] visited, int depth, int n, int r, long k) {
-        if (depth == r) {
-            count ++;
-            if(count == k) {
-                answer = output;
-            }
+            System.out.println(Arrays.toString(output) + " " + r);
+            map.put((long) (map.size() + 1), output.clone());
             return;
         }
 
@@ -54,10 +47,42 @@ class Solution {
             if (!visited[i]) {
                 visited[i] = true;
                 output[depth] = arr[i];
-                perm(arr, output, visited, depth + 1, n, r, k);
-                output[depth] = 0;
+                perm(arr, output, visited, depth + 1, n, r, count);
+                output[depth] = 0; // 이 줄은 없어도 됨
                 visited[i] = false;
             }
+
+//            if(map.size() == count)
+//                break;
         }
     }
+
+    public static long getPermutationCount(int n, long r) {
+        return factorial(n) / factorial((int) (n-r));
+    }
+
+    public static long factorial(int i) {
+        if(i<=1) return 1;
+        else return i * factorial(i-1);
+    }
 }
+
+// 2 1
+// 1 2
+// 2 1
+// 2
+
+// 3 5
+// 5 - 2(2!)
+// 1 2 3
+// 1 3 2
+// 2 1 3
+// 2 3 1
+// 3 1 2
+// 3 2 1
+// nPr
+// 3! 2! 1!
+// 5 - 3!/3(2!) -> 1
+// 4 -> 4/3!/3 -> 2 Math.ceil() 1 3 3 1
+// nPr -> 2P1 -> 2!
+// 3 - 2(2!) -> 2 ?
