@@ -3,54 +3,70 @@ import java.util.Queue;
 
 class Solution {
     public static void main(String[] args) {
-//        System.out.println(solution(4, 3, new int[][]{{2, 2}}));
-        System.out.println(solution(4, 3, new int[][]{{1, 3}, {3, 1}}));
+        System.out.println(solution(4, 3, new int[][]{{2, 2}}));
+//        System.out.println(solution(100, 100, new int[][]{{-1, -1}}));
+//        System.out.println(solution(2, 2, new int[][]{{1, 2}, {2, 1}}));
+//        System.out.println(solution(4, 3, new int[][]{{1, 3}, {3, 1}}));
     }
 
     public static int solution(int m, int n, int[][] puddles) {
         int[][] graph = new int[n][m];
-        int[][] cache = new int[n][m];
 
         for (int[] i : puddles) {
             if (i[0] > 0 && i[1] > 0)
-                cache[i[1] - 1][i[0] - 1] = -1;
+                graph[i[1] - 1][i[0] - 1] = -1;
         }
 
-        return (int) (recursive(graph, cache, 0, 0) % 1000000007);
+        graph[n - 1][m - 1] = 1;
+        return dp(graph);
     }
 
-    public static long recursive(int[][] graph, int[][] cache, int y, int x) {
-        if (y >= graph.length || x >= graph[0].length || cache[y][x] == -1)
-            return 0;
-
-        if (cache[y][x] > 0) {
-            cache[y][x] += 1;
-            return cache[y][x];
+    public static int dp(int[][] graph) {
+        for (int y = graph.length - 1; y >= 0; y--) {
+            for (int x = graph[y].length - 1; x >= 0; x--) {
+                if (graph[y][x] == -1)
+                    graph[y][x] = -1;
+                else {
+                    if (y - 1 >= 0 && graph[y - 1][x] != -1)
+                        graph[y - 1][x] = (graph[y - 1][x] + graph[y][x]) % 1000000007;
+                    if (x - 1 >= 0 && graph[y][x - 1] != -1)
+                        graph[y][x - 1] = (graph[y][x - 1] + graph[y][x])  % 1000000007;
+                }
+            }
         }
-        else if (y == graph.length - 1 && x == graph[0].length - 1) {
-            return 1;
-        }
 
-        cache[y][x] += 1;
-
-        cache[y][x] = (int) (recursive(graph, cache, y + 1, x) + recursive(graph, cache, y, x + 1));
-        return (long) cache[graph.length-1][graph[0].length-2] + (long) cache[graph.length-2][graph[0].length-1];
+        return graph[0][0] % 1000000007;
     }
 
-//    public static long recursive(int[][] graph, int[][] cache, int y, int x) {
-//        if (y >= graph.length || x >= graph[0].length || cache[y][x] == -1)
+//    public static long recursive(long[][] graph, int y, int x) {
+//        if (y >= graph.length || x >= graph[0].length || graph[y][x] == -1)
 //            return 0;
 //
-//        cache[y][x] = 1;
-//        if (cache[y][x] == 0 && y > 0 && x > 0)
-//            return 1;
-//        else if (y == graph.length - 1 && x == graph[0].length - 1) {
-//            cache[y][x] = 1;
+//        if (graph[y][x] > 0) {
+//            return graph[y][x];
+//        } else if (y == graph.length - 1 && x == graph[0].length - 1) {
 //            return 1;
 //        }
 //
-//        return recursive(graph, cache, y + 1, x) + recursive(graph, cache, y, x + 1);
+//        graph[y][x] += 1;
+//
+//        return graph[y][x] = (recursive(graph, y, x + 1) + recursive(graph, y + 1, x)) % 1000000007;
 //    }
+
+    public static long recursive(int[][] graph, int y, int x) {
+        if (y >= graph.length || x >= graph[0].length || graph[y][x] == -1)
+            return 0;
+
+        graph[y][x] = 1;
+        if (graph[y][x] == 0 && y > 0 && x > 0)
+            return 1;
+        else if (y == graph.length - 1 && x == graph[0].length - 1) {
+            graph[y][x] = 1;
+            return 1;
+        }
+
+        return recursive(graph, y + 1, x) + recursive(graph, y, x + 1) % 1000000007;
+    }
 
     public static long search(int[][] graph, int[][] visited) {
         int[][] coord = new int[][]{{1, 0}, {0, 1}};
