@@ -72,11 +72,11 @@ public class Q42898 {
 
     public static long search(int[][] graph, int[][] visited) {
         int[][] coord = new int[][]{{1, 0}, {0, 1}};
-        Queue<Solution.Pair> queue = new LinkedList<>();
-        queue.add(new Solution.Pair(0, 0));
+        Queue<Pair> queue = new LinkedList<>();
+        queue.add(new Pair(0, 0));
 
         while (!queue.isEmpty()) {
-            Solution.Pair temp = queue.poll();
+            Pair temp = queue.poll();
             int y = temp.getY();
             int x = temp.getX();
 
@@ -85,7 +85,7 @@ public class Q42898 {
                 int nextX = ints[1] + x;
 
                 if (nextY < graph.length && nextX < graph[0].length && visited[nextY][nextX] != -1) {
-                    queue.add(new Solution.Pair(nextY, nextX));
+                    queue.add(new Pair(nextY, nextX));
                     visited[nextY][nextX] += 1;
                 }
             }
